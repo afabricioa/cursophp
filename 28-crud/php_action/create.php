@@ -2,6 +2,16 @@
   require_once 'db_connect.php';
   session_start();
 
+  //clear
+  function clear($input){
+    global $connect;
+    //proteção sql injection
+    $var = mysqli_escape_string($connect, $input);
+    //proteção xss
+    $var = htmlspecialchars($var);
+    return $var;
+  }
+
   if(isset($_POST['btao-cadastrar'])):
     /*
     $erros = array();
@@ -17,10 +27,10 @@
     $idade = filter_input(INPUT_POST, "idade", FILTER_SANITIZE_NUMBER_INT);
     */
 
-    $nome = mysqli_escape_string($connect, $_POST['nome']);
-    $sobrenome = mysqli_escape_string($connect, $_POST['sobrenome']);
-    $email = mysqli_escape_string($connect, $_POST['email']);
-    $idade = mysqli_escape_string($connect, $_POST['idade']);
+    $nome = clear($connect, $_POST['nome']);
+    $sobrenome = clear($connect, $_POST['sobrenome']);
+    $email = clear($connect, $_POST['email']);
+    $idade = clear($connect, $_POST['idade']);
 
     if(empty($nome) or empty($sobrenome) or empty($email) or empty($idade)):
       $_SESSION['mensagem'] = "Todos os campos precisam ser preenchidos";
